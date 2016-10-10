@@ -25,7 +25,7 @@
                 <div><span id="doping">2004 Tour de France title stripped by UCI in 2012</span></div>
             </div>
         </div>        
-        <script type="text/javascript">
+        <script type="text/javascript">     
             //width and height and padding of the svg element
             var width = 960;
             var height = 500;         
@@ -105,22 +105,38 @@
                     .attr("x", 330)
                     .attr("y", 495)                               
                     .attr("fill", "#009267")
-                    .text("No doping allegations");
+                    .text("No doping allegations");                
+                
+
                 
                 //drawing the plot
-                svg.selectAll("circle")
+                var circles = svg.selectAll("circle")
                 .data(dataset)
                 .enter()                
                 .append("circle")                               
                 .attr("cx", function(d, i){return xScale(max-createDate(dataset[dataset.length-1-i]["Time"]));})
-                .attr("cy", height)
-                .transition()
-                .duration(1000)
-                .attr("cy", function(d){return yScale(d["Place"]);})
+                .attr("cy", -100)
                 .attr("r", 5)                
                 .attr("fill", function(d){return d["Doping"]?"#ff1d25":"#009267";})
-                .on("mouseover", function(d){                                                
-                         d3.select(this).attr("fill", "#ff931e");                        
+                .classed("no-mouse",true);
+				
+				//transitions
+				var n=0;
+                circles.each(function() { n++;})
+                .transition()                                
+			    .delay(function(d,i){return i*50})                
+                .duration(1500)
+                .attr("cy", function(d){return yScale(d["Place"]);})
+                .on('end', function() {                	
+				       n--;
+				       if (!n) {
+							circles.classed("no-mouse",false);
+				       }
+				   })
+				
+				//mouse event listeners
+                circles.on("mouseover", function(d){                                                               		
+                        d3.select(this).attr("fill", "#ff931e");                        
                         //Update the tooltip position and value                        
                         d3.select("#name")
                         .text(d["Name"]);
@@ -135,8 +151,9 @@
                         
                         //Show the tooltip
                         d3.select("#tooltip").classed("hidden", false);
+
                     })        
-                .on("mouseout", function(d){
+                	.on("mouseout", function(d){                			
                             //get back to the original bar color
                             d3.select(this)
                                 .transition()
@@ -144,13 +161,12 @@
                                 .attr("fill",  function(d){return d["Doping"]?"#ff1d25":"#009267";});
                             //hide the tooltip    
                             d3.select("#tooltip").classed("hidden", true);    
-                        });                             
-                
-            }   
+                        });                                                
+            }   			             
             //get Date object 
-            function createDate(string){
+            function createDate(string){                
                 return new Date("Thu, 01 Jan 1970 00:"+string);
-            }
+            }            
         </script>            
     </body>
 </html>

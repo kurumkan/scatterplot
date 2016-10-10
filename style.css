@@ -45,11 +45,13 @@ svg .axis text {
     background: #243656;
     -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-    pointer-events: none;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);    
     top:170px;
     left: 250px;
 }            
 a{
     color: #9e005d;
+}
+.no-mouse {
+    pointer-events: none;
 }
